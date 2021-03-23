@@ -89,13 +89,13 @@ func monitorForPlotFiles() {
 	}()
 
 	if err := w.AddRecursive(plotterOutputPath); err != nil {
-		log.Fatalln(err)
+		log.Fatalf("1: %s", err)
 	}
 
 	log.Printf("Plot file watcher started: %s\n", plotterOutputPath)
 
 	if err := w.Start(time.Millisecond * 100); err != nil {
-		log.Println(err)
+		log.Printf("2: %s", err)
 	}
 }
 
