@@ -35,7 +35,7 @@ func transferToFarmer(srcPath string) {
 	rand.Seed(time.Now().UnixNano())
 
 	clientConfig, _ := auth.PrivateKey(farmerUsername, farmerKey, ssh.InsecureIgnoreHostKey())
-	client := scp.NewClient(farmerHost + ":22", &clientConfig)
+	client := scp.NewClientWithTimeout(farmerHost + ":22", &clientConfig, time.Hour)
 	err := client.Connect()
 	if err != nil {
 		log.Println("Couldn't establish a connection to the remote server ", err)
@@ -48,6 +48,8 @@ func transferToFarmer(srcPath string) {
 
 	filename := fmt.Sprintf("plot-%s.plot.xfer", randSeq(32))
 	dstPath := fmt.Sprintf("%s%s", farmerPlotPath, filename)
+
+	log.Printf("Starting transfer: %s -> %s \n", srcPath, dstPath)
 
 	err = client.CopyFile(f, dstPath, "0655")
 	if err != nil {
