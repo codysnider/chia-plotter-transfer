@@ -43,6 +43,7 @@ func transferToFarmer(srcPath string) {
 	}
 
 	f, _ := os.Open(srcPath)
+	// f, _ := os.OpenFile(srcPath)
 	defer client.Close()
 	defer f.Close()
 
@@ -51,7 +52,7 @@ func transferToFarmer(srcPath string) {
 
 	log.Printf("Starting transfer: %s -> %s \n", srcPath, dstPath)
 
-	err = client.CopyFile(f, dstPath, "0655")
+	err = client.CopyFromFile(*f, dstPath, "0655")
 	if err != nil {
 		log.Println("Error while copying file ", err)
 		return
