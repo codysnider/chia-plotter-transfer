@@ -77,7 +77,9 @@ func monitorForPlotFiles() {
 		for {
 			select {
 			case event := <-w.Event:
-				transferToFarmer(event.Path)
+				go func(srcPath string) {
+					transferToFarmer(srcPath)
+				}(event.Path)
 			case err := <-w.Error:
 				log.Println(err)
 			case <-w.Closed:
